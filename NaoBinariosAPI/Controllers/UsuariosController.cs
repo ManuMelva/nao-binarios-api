@@ -25,5 +25,11 @@ namespace NaoBinariosAPI.Controllers
         {
             return Users;
         }
+
+        [HttpGet("{id}")]
+        public Usuario Get(string id)
+        {
+            return Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
+        }
     }
 }
