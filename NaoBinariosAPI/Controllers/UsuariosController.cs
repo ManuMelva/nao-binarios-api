@@ -3,9 +3,10 @@ using NaoBinariosAPI.Models;
 
 namespace NaoBinariosAPI.Controllers
 {
+    [Produces("application/json")]
     [ApiController]
-    [Route("[controller]")]
-    public class UsuariosController: ControllerBase
+    [Route("api/users")]
+    public class UsuariosController : ControllerBase
     {
         private static readonly List<Usuario> Users = 
         [
@@ -20,16 +21,38 @@ namespace NaoBinariosAPI.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetUsers")]
-        public IEnumerable<Usuario> Get()
+        /// <summary>
+        /// Obter uma lista com todos os usuários.
+        /// </summary>
+        /// <returns>Lista contendo todos os usuários</returns>
+        /// <response code="200">Sucesso ao consultar todos os usuários</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<Usuario>> GetAll()
         {
-            return Users;
+            return Ok(Users);
         }
 
+        /// <summary>
+        /// Retorna um usuário consultado por seu ID
+        /// </summary>
+        /// <remarks>
+        /// Endpoint para consultar um usuário específico por seu ID.
+        /// </remarks>
+        /// <param name="id">ID do usuário</param>
+        /// <returns>Dados do usuário</returns>
+        /// <response code="200">Usuário consultado com sucesso!</response>
+        /// <response code="404">Usuário não encontrado!</response>
         [HttpGet("{id}")]
-        public Usuario Get(string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Usuario> GetByID(string id)
         {
-            return Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
+            var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
+
+            if(user != null) return Ok(user);
+
+            return NotFound();
         }
     }
 }
