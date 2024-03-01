@@ -1,6 +1,6 @@
 @NaoBinariosAPI_HostAddress = http://localhost:8081
 
-GET {{NaoBinariosAPI_HostAddress}}/weatherforecast/
+GET {{NaoBinariosAPI_HostAddress}}/users/
 Accept: application/json
 
 ###
