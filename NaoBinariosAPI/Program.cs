@@ -1,5 +1,5 @@
 using Microsoft.OpenApi.Models;
-using NaoBinariosAPI.Models;
+using NaoBinariosAPI.SwaggerExamples.Responses;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerExamplesFromAssemblyOf<SwaggerExamples>();
+builder.Services.AddSwaggerExamplesFromAssemblyOf<UsuarioExample>();
 builder.Services.AddSwaggerGen(x => 
 {
     x.SwaggerDoc("v1", new OpenApiInfo

@@ -1,8 +1,9 @@
+using NaoBinariosAPI.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace NaoBinariosAPI.Models
+namespace NaoBinariosAPI.SwaggerExamples.Responses
 {
-    public class SwaggerExamples : IExamplesProvider<Usuario>
+    public class UsuarioExample : IExamplesProvider<Usuario>
     {
         public Usuario GetExamples()
         {
@@ -11,7 +12,7 @@ namespace NaoBinariosAPI.Models
                 IDUsuario = 99,
                 Nome = "João das Bananas",
                 Idade = 200,
-                Profissao = "Macho flexível"
+                Profissao = "Dançarino exótico"
             };
         }
     }
