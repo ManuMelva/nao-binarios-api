@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace NaoBinariosAPI.Models
 {
     public class Usuario
     {
-        public required int IDUsuario { get; set; }
+        [JsonIgnore]
+        public int IDUsuario { get; set; }
 
         [Required(ErrorMessage = "O atributo Nome não pode ser nulo")]
         public required string Nome { get; set; }
