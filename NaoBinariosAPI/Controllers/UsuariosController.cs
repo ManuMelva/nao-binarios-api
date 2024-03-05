@@ -8,11 +8,13 @@ namespace NaoBinariosAPI.Controllers
     [Route("api/users")]
     public class UsuariosController : ControllerBase
     {
-        private static readonly List<Usuario> Users = 
+        private static readonly List<Usuario> Users =
         [
             new Usuario{IDUsuario=1,Nome="Emmanuel",Idade=19,Profissao="Garoto de Programa"},
             new Usuario{IDUsuario=2,Nome="Guilherme",Idade=19,Profissao="Dama da Noite"}
         ];
+
+        private static int RetornaUltimoID() => Users.Last().IDUsuario + 1;
 
         private readonly ILogger<UsuariosController> _logger;
 
@@ -50,7 +52,36 @@ namespace NaoBinariosAPI.Controllers
         {
             var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
 
-            if(user != null) return Ok(user);
+            if (user != null) return Ok(user);
+
+            return NotFound();
+        }
+
+        /// <summary>
+        /// Atualiza um usuário por ID passado por parametro.
+        /// </summary>
+        /// <remarks>
+        /// Endpoint para atualizar um usuário.
+        /// </remarks>
+        /// <param name="id">ID do usuário</param>
+        /// <param name="editUsuario">Objeto usuário</param>
+        /// <returns>Dados do usuário</returns>
+        /// <response code="200">Usuário alterado com sucesso!</response>
+        /// <response code="404">Usuário não encontrado!</response>
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Usuario> PutByID(string id, Usuario editUsuario)
+        {
+            var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
+
+            if (user != null)
+            {
+                editUsuario.IDUsuario = RetornaUltimoID();
+                Users.Remove(user);
+                Users.Add(editUsuario);
+                return Ok(editUsuario);
+            }
 
             return NotFound();
         }
