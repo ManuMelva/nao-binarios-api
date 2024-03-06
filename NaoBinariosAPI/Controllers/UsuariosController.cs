@@ -47,14 +47,14 @@ namespace NaoBinariosAPI.Controllers
         /// <response code="404">Usuário não encontrado!</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public ActionResult<Usuario> GetByID(string id)
         {
             var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
 
             if (user != null) return Ok(user);
 
-            return NotFound();
+            return NotFound(new ErrorResponse{Errors = [new ErrorModel{ErrorMessage = "Usuário não encontrado"}]});
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace NaoBinariosAPI.Controllers
         /// <response code="404">Usuário não encontrado!</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public ActionResult<Usuario> PutByID(string id, Usuario editUsuario)
         {
             var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
@@ -83,7 +83,7 @@ namespace NaoBinariosAPI.Controllers
                 return Ok(editUsuario);
             }
 
-            return NotFound();
+            return NotFound(new ErrorResponse{Errors = [new ErrorModel{ErrorMessage = "Usuário não encontrado"}]});
         }
     }
 }
