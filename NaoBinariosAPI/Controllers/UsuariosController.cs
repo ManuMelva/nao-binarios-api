@@ -85,5 +85,20 @@ namespace NaoBinariosAPI.Controllers
 
             return NotFound(new ErrorResponse{Errors = [new ErrorModel{ErrorMessage = "Usuário não encontrado"}]});
         }
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        public ActionResult<Usuario> PostUsuario(Usuario novoUsuario)
+        {
+            if (novoUsuario == null)
+            {
+                return BadRequest(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "O usuário enviado é inválido" }] });
+            }
+
+            novoUsuario.IDUsuario = RetornaUltimoID();
+            Users.Add(novoUsuario);
+
+            return CreatedAtAction(nameof(GetByID), new { id = novoUsuario.IDUsuario }, novoUsuario);
+        }
     }
 }
