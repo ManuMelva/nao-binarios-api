@@ -85,6 +85,17 @@ namespace NaoBinariosAPI.Controllers
 
             return NotFound(new ErrorResponse{Errors = [new ErrorModel{ErrorMessage = "Usuário não encontrado"}]});
         }
+
+        /// <summary>
+        /// Insere um usuário novo na API.
+        /// </summary>
+        /// <remarks>
+        /// Endpoint para inserir um usuário.
+        /// </remarks>
+        /// <param name="novoUsuario">Objeto usuário</param>
+        /// <returns>Dados do usuário</returns>
+        /// <response code="200">Usuário inserido com sucesso!</response>
+        /// <response code="400">Falha na inserção!</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
@@ -95,10 +106,25 @@ namespace NaoBinariosAPI.Controllers
                 return BadRequest(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "O usuário enviado é inválido" }] });
             }
 
+            if(!VerifyName(novoUsuario.Nome))
+            {
+                return BadRequest(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "Já existe um usuário com este nome." }] });
+            }
+
             novoUsuario.IDUsuario = RetornaUltimoID();
             Users.Add(novoUsuario);
 
             return CreatedAtAction(nameof(GetByID), new { id = novoUsuario.IDUsuario }, novoUsuario);
+        }
+
+        private static bool VerifyName(string name)
+        {
+            if (Users.Any(user => user.Nome.Equals(name)))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
