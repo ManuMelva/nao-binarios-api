@@ -40,6 +40,17 @@ namespace NaoBinariosAPI.Controllers
             return Ok(Users);
         }
 
+        /// <summary>
+        /// Atualiza um usuário por ID passado por parametro.
+        /// </summary>
+        /// <remarks>
+        /// Endpoint para atualizar um usuário.
+        /// </remarks>
+        /// <param name="id">ID do usuário</param>
+        /// <param name="editUsuario">Objeto usuário</param>
+        /// <returns>Dados do usuário</returns>
+        /// <response code="200">Usuário alterado com sucesso!</response>
+        /// <response code="404">Usuário não encontrado!</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
