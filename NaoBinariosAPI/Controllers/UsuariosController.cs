@@ -41,6 +41,33 @@ namespace NaoBinariosAPI.Controllers
         }
 
         /// <summary>
+        /// Retorna um usuário consultado por seu ID
+        /// </summary>
+        /// <remarks>
+        /// Endpoint para consultar um usuário específico por seu ID.
+        /// </remarks>
+        /// <param name="id">ID do usuário</param>
+        /// <returns>Dados do usuário</returns>
+        /// <response code="200">Usuário consultado com sucesso!</response>
+        /// <response code="404">Usuário não encontrado!</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public ActionResult<Usuario> GetByID(string id)
+        {
+
+            var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
+
+            if (user != null)
+            {
+                return Ok(user); 
+            }
+
+
+            return NotFound(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { ErrorMessage = "Usuário não encontrado" } } });
+        }
+
+        /// <summary>
         /// Atualiza um usuário por ID passado por parametro.
         /// </summary>
         /// <remarks>
@@ -100,8 +127,18 @@ namespace NaoBinariosAPI.Controllers
             return CreatedAtAction(nameof(GetByID), new { id = novoUsuario.IDUsuario }, novoUsuario);
         }
 
+        /// <summary>
+        /// Remove um usuário da API.
+        /// </summary>
+        /// <remarks>
+        /// Endpoint para remover um usuário.
+        /// </remarks>
+        /// <param name="id">ID do usuário</param>
+        /// <returns>Dados do usuário</returns>
+        /// <response code="200">Usuário removido com sucesso!</response>
+        /// <response code="400">Falha na remoção!</response>
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public IActionResult DeleteByID(string id)
         {
@@ -116,25 +153,6 @@ namespace NaoBinariosAPI.Controllers
             return NotFound(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "Usuário não encontrado" }] });
         }
 
-        private static bool VerifyName(string name)
-        {
-            return !Users.Any(user => user.Nome.Equals(name));
-        }
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public ActionResult<Usuario> GetByID(string id)
-        {
-
-            var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
-
-            if (user != null)
-            {
-                return Ok(user); 
-            }
-
-
-            return NotFound(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { ErrorMessage = "Usuário não encontrado" } } });
-        }
+        private static bool VerifyName(string name) => !Users.Any(user => user.Nome.Equals(name));
     }
 }
