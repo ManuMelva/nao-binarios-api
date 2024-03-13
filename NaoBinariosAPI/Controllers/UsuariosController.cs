@@ -36,28 +36,6 @@ namespace NaoBinariosAPI.Controllers
         }
 
         /// <summary>
-        /// Retorna um usuário consultado por seu ID
-        /// </summary>
-        /// <remarks>
-        /// Endpoint para consultar um usuário específico por seu ID.
-        /// </remarks>
-        /// <param name="id">ID do usuário</param>
-        /// <returns>Dados do usuário</returns>
-        /// <response code="200">Usuário consultado com sucesso!</response>
-        /// <response code="404">Usuário não encontrado!</response>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public ActionResult<Usuario> GetByID(string id)
-        {
-            var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
-
-            if (user != null) return Ok(user);
-
-            return NotFound(new ErrorResponse{Errors = [new ErrorModel{ErrorMessage = "Usuário não encontrado"}]});
-        }
-
-        /// <summary>
         /// Atualiza um usuário por ID passado por parametro.
         /// </summary>
         /// <remarks>
