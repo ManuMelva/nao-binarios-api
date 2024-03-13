@@ -120,5 +120,21 @@ namespace NaoBinariosAPI.Controllers
         {
             return !Users.Any(user => user.Nome.Equals(name));
         }
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public ActionResult<Usuario> GetByID(string id)
+        {
+
+            var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
+
+            if (user != null)
+            {
+                return Ok(user); 
+            }
+
+
+            return NotFound(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { ErrorMessage = "Usuário não encontrado" } } });
+        }
     }
 }
