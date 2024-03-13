@@ -1,5 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NaoBinariosAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace NaoBinariosAPI.Controllers
 {
@@ -61,7 +66,7 @@ namespace NaoBinariosAPI.Controllers
                 return Ok(editUsuario);
             }
 
-            return NotFound(new ErrorResponse{Errors = [new ErrorModel{ErrorMessage = "Usuário não encontrado"}]});
+            return NotFound(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "Usuário não encontrado" }] });
         }
 
         /// <summary>
@@ -84,7 +89,7 @@ namespace NaoBinariosAPI.Controllers
                 return BadRequest(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "O usuário enviado é inválido" }] });
             }
 
-            if(!VerifyName(novoUsuario.Nome))
+            if (!VerifyName(novoUsuario.Nome))
             {
                 return BadRequest(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "Já existe um usuário com este nome." }] });
             }
@@ -95,14 +100,25 @@ namespace NaoBinariosAPI.Controllers
             return CreatedAtAction(nameof(GetByID), new { id = novoUsuario.IDUsuario }, novoUsuario);
         }
 
-        private static bool VerifyName(string name)
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200NoContent)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        public IActionResult DeleteByID(string id)
         {
-            if (Users.Any(user => user.Nome.Equals(name)))
+            var user = Users.FirstOrDefault(x => x.IDUsuario == Convert.ToInt32(id));
+
+            if (user != null)
             {
-                return false;
+                Users.Remove(user);
+                return Ok(new { Message = "Usuário excluído com sucesso." });
             }
 
-            return true;
+            return NotFound(new ErrorResponse { Errors = [new ErrorModel { ErrorMessage = "Usuário não encontrado" }] });
+        }
+
+        private static bool VerifyName(string name)
+        {
+            return !Users.Any(user => user.Nome.Equals(name));
         }
     }
 }
