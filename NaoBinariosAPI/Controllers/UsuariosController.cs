@@ -28,6 +28,11 @@ namespace NaoBinariosAPI.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Obter uma lista com todos os usuários.
+        /// </summary>
+        /// <returns>Lista contendo todos os usuários</returns>
+        /// <response code="200">Sucesso ao consultar todos os usuários</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<Usuario>> GetAll()
